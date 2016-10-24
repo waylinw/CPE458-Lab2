@@ -17,8 +17,8 @@ client_error_code = {'Bad Request':0x00800000, 'Unauthorized':0x00810000, 'Bad O
                      'Not Found':0x00840000, 'Method Not Allowed':0xFF85FFFF, 'Not Acceptable':0x00860000,
                      'Precondition Failed':0x008C0000, 'Request Entity Too Large':0x008D0000,
                      'Unsupported Content-Format':0x008F0000}
-server_error_code = {0x00:'Internal Server Error', 0x01:'Not Implemented', 0x02:'Bad Gateway',
-                     0x03:'Service Unavailable', 0x04:'Gateway Timeout', 0x05:'Proxying Not Supported'}
+# server_error_code = {0x00:'Internal Server Error', 0x01:'Not Implemented', 0x02:'Bad Gateway',
+#                      0x03:'Service Unavailable', 0x04:'Gateway Timeout', 0x05:'Proxying Not Supported'}
 
 def find(name, path):
     for root, dirs, files in os.walk(path):
@@ -53,7 +53,13 @@ def POST(header, option_data):
 
 def PUT(header, option_data):
     print("PUT Request")
-    return 0
+
+    code = success_ret_code['Created']
+    filename = strftime("%H%M%S%d%m%Y", gmtime()) + '.html'
+    with open(filename, 'w') as myfile:
+        myfile.write(option_data.decode())
+
+    return code, os.getcwd() + '/' + filename
 
 def DELETE(header, option_data):
     print("DELETE Request")
