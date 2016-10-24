@@ -10,23 +10,27 @@ server_address = ('localhost', 12345)
 print ('starting up on %s port %s' % server_address)
 sock.bind(server_address)
 
-def GET():
+def GET(header, option_data):
     print("GET Request")
+    return 0
 
-def POST():
+def POST(header, option_data):
     print("POST Request")
+    return 0
 
-def PUT():
+def PUT(header, option_data):
     print("PUT Request")
+    return 0
 
-def DELETE():
+def DELETE(header, option_data):
     print("DELETE Request")
+    return 0
 
 options = {1: GET, 2: POST, 3: PUT, 4: DELETE}
 
-def handleReq(header_option):
-    code = (header_option[0] & 0x00FF0000) >> 16
-    options[code]()
+def handleReq(header, option_data):
+    code = (header[0] & 0x00FF0000) >> 16
+    return options[code](header, option_data)
 
 def unpackMsg(data):
     size = calcsize('!IB')
@@ -42,10 +46,10 @@ def recvData():
         print ('received %s bytes from %s' % (len(data), address))
         header_option, option_data = unpackMsg(data)
 
-        handleReq(header_option)
+        return_msg = handleReq(header_option, option_data)
 
-        if data:
-            sent = sock.sendto(data, address)
+        if return_msg:
+            sent = sock.sendto(return_msg, address)
             print('sent %s bytes back to %s' % (sent, address))
 
 def sendData():
