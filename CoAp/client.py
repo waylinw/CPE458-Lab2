@@ -76,9 +76,6 @@ def parseReceivedData(data):
 
     code = (header[0] & 0x00FF0000) >> 16
 
-    # 0xA5 for give up error # 0x45 for success and parse msg # A3 for error retry
-    # code = 0x45
-
     ret_code = code >> 5
     try:
         status = ret_code_class[ret_code].get(code & 0x1F)
@@ -126,6 +123,6 @@ if data_received == 0:
 elif data_received == 1:
     print('Error has occured, not retrying')
 else:
-    print('Begin Data:\n%s' % data_received.strip())
+    print('Begin Data:\n%s' % data_received)
 
 socket.close()
